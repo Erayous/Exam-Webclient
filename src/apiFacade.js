@@ -1,5 +1,7 @@
 import {backend_url} from "./settings.js"
 
+
+
 function handleHttpErrors(res) {
 	if (!res.ok) {
 		return window.M.toast({html: "Serveren returnerede fejlkode: " + res.status}) //Promise.reject({status: res.status, fullError: res.json()}) 
@@ -37,16 +39,18 @@ function apiFacade() {
 		return fetch(backend_url + "/api/info/" + user, options).then(handleHttpErrors);
 	};
 
-	const fetch_AllFlights = (url) => {
-		return fetch(url).then(handleHttpErrors);
+
+
+	const fetch_AllRecipes = (url) => {
+		return fetch(backend_url + "/api/madplan/all").then(handleHttpErrors);
 	};
 
-	const search = (departure, arrival, date) => {
-		const options = makeOptions("POST", true, {departureAirportName: departure, arrivalAirportName: arrival, departureDate: date});
-		return fetch(backend_url + "/api/flights/search", options)
+	const search = (criteria) => {
+		const options = makeOptions("POST", true, {id: criteria});
+		return fetch(backend_url + "/api/madplan/search", options)
 			.then(handleHttpErrors);
 	};
-
+	
 	const makeOptions = (method, addToken, body) => {
 		var opts = {
 			method: method,
@@ -72,7 +76,7 @@ function apiFacade() {
 		login,
 		logout,
 		fetchData,
-		fetch_AllFlights,
+		fetch_AllRecipes,
 		search
 	}
 }

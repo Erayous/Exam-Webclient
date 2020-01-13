@@ -11,7 +11,10 @@ body {
 
 
 
-
+.pnoOverflow{
+  width:100%; 
+  word-wrap:break-word;
+}
 
 .notLoggedInP {
   font-weight: 800;

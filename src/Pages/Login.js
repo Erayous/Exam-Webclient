@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import facade from "./apiFacade";
+import facade from "../apiFacade";
 
 
 function LogIn({login}) {
@@ -16,20 +16,30 @@ function LogIn({login}) {
 
 	return (
 		<div>
-      <div className="card">
-        <div className="card-container">
-        <h2>Login</h2>
-        <p className="notLoggedInP">For at kunne bruge alle vores REST-endpoints bedes du logge ind.</p>
-        <form onChange={onChange}>
-          <br/>
-          <input placeholder="Brugernavn" id="username"/>
-          <br/>
-          <input placeholder="Adgangskode" id="password"/>
-          <br></br>
-          <button className="btn btn-warning btn-cons" onClick={performLogin}>Login</button>
-        </form>
-        </div>
-      </div>
+			<div class="row">
+			<div class="offset-s4 col s4 offset-s4">
+				<div class="card-panel">
+				<form onChange={onChange} style={{display: "inline-block"}}>
+					<br/>
+		
+						<div class="col s12">
+							<input placeholder="Brugernavn" id="username"/>
+						</div>
+				
+						<div class="col s12">
+							<input placeholder="Adgangskode" id="password"/>
+						</div>
+				
+					<br/>
+					<div class="col s12">
+						<button className="waves-effect waves-light btn" onClick={performLogin}>Login</button>
+					</div>
+					<br/>
+					
+				</form>
+				</div>
+			</div>
+			</div>
 		</div>
 	)
 
@@ -48,3 +58,63 @@ function LoggedIn({user}) {
 		</div>
 	)
 }
+
+export function Login() {
+	const [loggedIn, setLoggedIn] = useState(false)
+	const [user, setUser] = useState("");  
+  
+	const logout = () => {
+		facade.logout();
+		setLoggedIn(false)
+
+	}
+	const login = (user, pass) => {
+		facade.login(user, pass).then(res => setLoggedIn(true));
+		setUser(user);
+	}
+	const token = localStorage.getItem("jwtToken");
+	
+	return (
+	  
+	  <div>
+		<div class="row">
+			<div class="offset-s4 col s4 offset-s4">
+			<br></br>
+			<center>
+				<h5>Login</h5>
+				<hr />
+				<p>Log ind for at kunne gemme dine ugeplaner</p>
+				
+			</center>
+			</div>
+      	</div>
+  
+		{!loggedIn ? (<LogIn login={login} />) :
+		  (<div>
+			<div class="row">
+			<div class="offset-s3 col s6 offset-s3">
+				<div class="card-panel">
+					<div class="row">
+					<div class="col s12">
+						<p className="LoggedInP">Du er nu logget ind</p>
+						<hr/>
+						<p>Serveren svarede: </p>
+						<p className="pnoOverflow" style={{fontSize: "12px"}}><LoggedIn user={user} /></p>
+						<p className="pnoOverflow" style={{fontSize: "12px"}}><b>Token: </b>{token}</p>
+						<br></br>
+
+						<button className="waves-effect waves-light btn" onClick={logout}>Opret ugeplan</button>
+						<hr />
+						<button className="waves-effect waves-light btn" onClick={logout}>Log ud</button>
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		  </div>)}
+		
+	  </div>
+	);
+  }
+
+  
